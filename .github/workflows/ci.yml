@@ -1,0 +1,44 @@
+name: CI
+on: [push]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+            coverage: "none"
+            extensions: "bcmath,exif,gd,json,xsl,zip"
+            ini-values: "memory_limit=-1"
+            php-version: "8.0"
+        env:
+            fail-fast: true
+            update: true
+
+      - name: Check CI reqs
+        run: composer check-platform-reqs
+
+      - name: Load vendors from cache
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+            path: vendor
+            key: ${{ runner.os }}-vendor-${{ hashFiles('**/composer.lock') }}
+
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-progress
+
+      - name: Dump autoloader (in case something changed)
+        if: steps.composer-cache.outputs.cache-hit == 'true'
+        run: composer dumpautoload
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --no-interaction --no-progress --error-format=github

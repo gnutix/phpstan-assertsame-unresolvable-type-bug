@@ -29,7 +29,11 @@ final class TimelineTest extends TestCase
             [1, null, null, 4],
         ];
 
+        \PHPStan\dumpType($expected);
+
         self::assertSame($expected, $this->values($timeline1->zip($timeline2, $timeline3, $timeline4)));
+
+        \PHPStan\dumpType($expected);
 
         self::assertSame($expected, $this->values(Timeline::zipAll($timeline1, $timeline2, $timeline3, $timeline4)));
     }
