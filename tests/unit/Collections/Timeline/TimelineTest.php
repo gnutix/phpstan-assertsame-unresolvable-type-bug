@@ -29,8 +29,12 @@ final class TimelineTest extends TestCase
             [1, null, null, 4],
         ];
 
+        // Dumped type: array{array{1, null, null, null}, array{1, 2, 3, null}, array{1, 2, 3, 4}, array{1, null, 3, 4}, array{1, null, null, 4}}
+        // \PHPStan\dumpType($expected);
         self::assertSame($expected, $this->values($timeline1->zip($timeline2, $timeline3, $timeline4)));
 
+        // Dumped type: array{array{1, *NEVER*, *NEVER*, *NEVER*}, array{1, 2, 3, *NEVER*}, array{1, 2, 3, 4}, array{1, *NEVER*, 3, 4}, array{1, *NEVER*, *NEVER*, 4}}
+        // \PHPStan\dumpType($expected);
         self::assertSame($expected, $this->values(Timeline::zipAll($timeline1, $timeline2, $timeline3, $timeline4)));
     }
 
