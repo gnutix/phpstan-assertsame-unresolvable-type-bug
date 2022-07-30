@@ -1,0 +1,35 @@
+{
+    "name": "gnutix/phpstan-assertsame-unresolvable-type-bug",
+    "description": "tipee",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Gammadia S.A.",
+            "email": "info@gammadia.ch"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "brick/date-time": "0.4.1",
+        "phpunit/phpunit": "9.5.21",
+        "doctrine/orm": "2.12.3",
+        "symfony/polyfill-php81": "1.22",
+        "jangregor/phpstan-prophecy": "^1.0",
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpstan/phpstan": "^1.4",
+        "phpstan/phpstan-doctrine": "^1.2",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "phpstan/phpstan-webmozart-assert": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gammadia\\": "src/",
+            "Gammadia\\Collections\\Test\\Unit\\": "tests/unit/Collections"
+        },
+        "files": [
+            "src/Collections/Functional/Functional.php",
+            "src/Collections/Functional/FunctionalStream.php",
+            "src/Common/Comparison/Equals.php"
+        ]
+    }
+}

@@ -1,0 +1,130 @@
+services:
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Rules\UseFunctionalFunctionsPhpStanRule
+        tags:
+            - phpstan.rules.rule
+
+    #
+    # Re-using PHPStan extensions for array_* shortcuts in Functional
+    #
+
+    # column <-> array_column
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalColumnDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    # combine <-> array_combine - this one has some custom code to deal with error handling differences
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalCombineDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    # concat <-> array_merge
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalConcatDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    # contains <-> in_array
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalContainsFunctionTypeSpecifyingExtension
+        tags:
+            - phpstan.typeSpecifier.functionTypeSpecifyingExtension
+
+    # fill <-> array_fill
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalFillDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    # filter <-> array_filter
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalFilterDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    # firstKey <-> array_key_first
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalFirstKeyDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    # flip <-> array_flip
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalFlipDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    # keyExists <-> array_key_exists
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalKeyExistsFunctionTypeSpecifyingExtension
+        tags:
+            - phpstan.typeSpecifier.functionTypeSpecifyingExtension
+
+    # keys <-> array_keys
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalKeysDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    # map <-> array_map - this one has some custom code to deal with reversed arguments positions
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalMapDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    # reduce <-> array_reduce
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalReduceDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    # reverse <-> array_reverse
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalReverseDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    # values <-> array_values
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalValuesDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    # zip <-> array_merge - this one has some custom code to add null as first argument
+    -
+        class: Gammadia\Collections\PhpStan\Functional\Extensions\FunctionalZipDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    #
+    # Timeline
+    #
+
+    -
+        class: Gammadia\Collections\PhpStan\Timeline\Extensions\TimelineImportDynamicReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension
+
+parameters:
+    ignoreErrors:
+        # There's no sense in checking that we use the Functional functions inside the files that define them.
+        -
+            message: '#use function Gammadia\\Collections\\Functional\\#'
+            paths:
+                - '../../Functional/Functional.php'
+                - '../../Functional/FunctionalStream.php'
+
+        -
+            message: '#no value type specified in iterable type array.#'
+            paths:
+                - '../../Functional/Functional.php'
+                - '../../Functional/FunctionalStream.php'
+
+        # Re-using PHPStan's dynamic return type extensions is at our own risk
+        -
+            message: '#is not covered by backward compatibility promise#'
+            paths:
+                - '../Functional'
+                - '../Timeline'
